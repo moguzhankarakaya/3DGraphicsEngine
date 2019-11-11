@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.645
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PPGEngine", "PPGEngine\PPGEngine.vcxproj", "{325E4B0F-41C2-4ACB-92EC-60A548844192}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{325E4B0F-41C2-4ACB-92EC-60A548844192}.Debug|x64.ActiveCfg = Debug|x64
+		{325E4B0F-41C2-4ACB-92EC-60A548844192}.Debug|x64.Build.0 = Debug|x64
+		{325E4B0F-41C2-4ACB-92EC-60A548844192}.Debug|x86.ActiveCfg = Debug|Win32
+		{325E4B0F-41C2-4ACB-92EC-60A548844192}.Debug|x86.Build.0 = Debug|Win32
+		{325E4B0F-41C2-4ACB-92EC-60A548844192}.Release|x64.ActiveCfg = Release|x64
+		{325E4B0F-41C2-4ACB-92EC-60A548844192}.Release|x64.Build.0 = Release|x64
+		{325E4B0F-41C2-4ACB-92EC-60A548844192}.Release|x86.ActiveCfg = Release|Win32
+		{325E4B0F-41C2-4ACB-92EC-60A548844192}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {332D2C46-C907-4B7E-A27C-AAE266B337B0}
+	EndGlobalSection
+EndGlobal
