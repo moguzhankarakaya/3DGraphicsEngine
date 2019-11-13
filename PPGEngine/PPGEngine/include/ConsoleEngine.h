@@ -9,7 +9,7 @@
 
 #include "Mesh.h"
 
-class ConsoleEngine : public olcConsoleGameEngine
+class ConsoleEngine : public olcConsoleGameEngineOOP
 {
 public:
 	ConsoleEngine();
@@ -21,6 +21,6 @@ public:
 	bool OnUserUpdate(float fElapsedTine) override;
 
 private:
-	Mesh testCube;
+	PPG::Mesh testCube;
 
 };

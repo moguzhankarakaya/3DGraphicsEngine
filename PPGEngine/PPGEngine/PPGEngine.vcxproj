@@ -163,6 +163,8 @@
     <ClCompile Include="source\ConsoleEngine.cpp" />
     <ClCompile Include="source\GeoPrimatives.cpp" />
     <ClCompile Include="source\Mesh.cpp" />
+    <ClCompile Include="source\OLCConsoleWindowInterface.cpp" />
+    <ClCompile Include="source\OLCConsoleWindowInterfaceGL.cpp" />
     <ClCompile Include="source\PPGMath.cpp" />
   </ItemGroup>
   <ItemGroup>

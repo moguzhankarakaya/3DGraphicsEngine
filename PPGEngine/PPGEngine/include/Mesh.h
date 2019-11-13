@@ -3,7 +3,10 @@
 
 #include "GeoPrimatives.h"
 
-struct Mesh
+namespace PPG
 {
-	std::vector<Triangle> mesh;
-};
+	struct Mesh
+	{
+		std::vector<Triangle> mesh;
+	};
+}
