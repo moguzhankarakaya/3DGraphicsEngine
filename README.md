@@ -9,8 +9,8 @@ to comprehend hardware controlled pipeline stages of rasterization.
 The whole project is created and tested using VS 2017.
 
 
-"What I cannot create, I do not understand."
+        "What I cannot create, I do not understand."
                                 
-                                Richard Feynman
+                                    Richard Feynman
 
 ![Alt Utah Teapot rendered using flat shading under different illumination](PPGEngine/PPGEngine/Teapot.png?raw=true "Utah Teapot")
