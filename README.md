@@ -3,7 +3,7 @@ This is a educational hobby project aminig to implement a simple 3D Graphics Eng
 
 It is a software based rasterization pipeline implementation. After implementing
 3D Graphics Engines using well-known APIs like Direct3D and OpenGL, it can be also
-good to get ones' hands dirty by implementing software based rasterization pipeline
+good to get ones' hands dirty by implementing a software based rasterization pipeline
 to comprehend hardware controlled pipeline stages of rasterization.
 
 The whole project is created and tested using VS 2017.
