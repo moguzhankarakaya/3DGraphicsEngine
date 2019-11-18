@@ -166,6 +166,7 @@
     <ClCompile Include="source\OLCConsoleWindowInterface.cpp" />
     <ClCompile Include="source\OLCConsoleWindowInterfaceGL.cpp" />
     <ClCompile Include="source\PPGMath.cpp" />
+    <ClCompile Include="source\Projection.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\ConsoleEngine.h" />
@@ -174,6 +175,7 @@
     <ClInclude Include="include\OLCConsoleWindowInterface.h" />
     <ClInclude Include="include\OLCConsoleWindowInterfaceGL.h" />
     <ClInclude Include="include\PPGMath.h" />
+    <ClInclude Include="include\Projection.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -5,9 +5,13 @@ namespace PPG
 {
 	struct Triangle
 	{
-		vec3 v[3];
+		Math::vec3 v[3];
+		short      color;
+		wchar_t    symbol;
 
-		Triangle(vec3 v1 = vec3(), PPG::vec3 v2 = vec3(), PPG::vec3 v3 = vec3()) : v{ v1, v2, v3 } {} 
+		Triangle(Math::vec3 v1 = Math::vec3(), Math::vec3 v2 = Math::vec3(), Math::vec3 v3 = Math::vec3()) : v{ v1, v2, v3 } {} 
+
+		Math::vec3 Interpolate(float alpha1, float alpha2, float alpha3);
 
 	};
 }

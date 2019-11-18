@@ -36,6 +36,9 @@
     <ClCompile Include="source\OLCConsoleWindowInterfaceGL.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\Projection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\OLCConsoleWindowInterface.h">
@@ -54,6 +57,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Projection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
