@@ -13,4 +13,4 @@ The whole project is created and tested using VS 2017.
                                 
                                     Richard Feynman
 
-![Alt Utah Teapot rendered using flat shading under different illumination](PPGEngine/PPGEngine/Teapot.png?raw=true "Utah Teapot")
+![Utah Teapot rendered using flat shading under different illumination](PPGEngine/PPGEngine/Teapot.png?raw=true "Utah Teapot")
