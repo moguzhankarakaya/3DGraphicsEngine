@@ -1,5 +1,5 @@
 #pragma once
-#define GL
+#define GENERIC
 //#define WIREFRAME
 
 #if defined(GL)

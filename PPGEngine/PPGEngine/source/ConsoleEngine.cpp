@@ -12,28 +12,6 @@ ConsoleEngine::ConsoleEngine(std::wstring windowTitle)
 
 bool ConsoleEngine::OnUserCreate()
 {	
-	/*
-	testCube.mesh = std::vector<PPG::Triangle>{
-		// SOUTH
-		{ {0.0f, 0.0f,  0.0f},     {0.0f, 1.0f,  0.0f},     {1.0f, 1.0f,  0.0f} },
-		{ {0.0f, 0.0f,  0.0f},     {1.0f, 1.0f,  0.0f},     {1.0f, 0.0f,  0.0f} },
-		// EAST
-		{ {1.0f, 0.0f,  0.0f},     {1.0f, 1.0f,  0.0f},     {1.0f, 1.0f, -1.0f} },
-		{ {1.0f, 0.0f,  0.0f},     {1.0f, 1.0f, -1.0f},     {1.0f, 0.0f, -1.0f} },
-		// NORTH
-		{ {1.0f, 0.0f, -1.0f},     {1.0f, 1.0f, -1.0f},     {0.0f, 1.0f, -1.0f} },
-		{ {1.0f, 0.0f, -1.0f},     {0.0f, 1.0f, -1.0f},     {0.0f, 0.0f, -1.0f} },
-		// WEST
-		{ {0.0f, 0.0f, -1.0f},     {0.0f, 1.0f, -1.0f},     {0.0f, 1.0f,  0.0f} },
-		{ {0.0f, 0.0f, -1.0f},     {0.0f, 1.0f,  0.0f},     {0.0f, 0.0f,  0.0f} },
-		// TOP
-		{ {0.0f, 1.0f,  0.0f},     {0.0f, 1.0f, -1.0f},     {1.0f, 1.0f, -1.0f} },
-		{ {0.0f, 1.0f,  0.0f},     {1.0f, 1.0f, -1.0f},     {1.0f, 1.0f,  0.0f} },
-		// BOTTOM
-		{ {1.0f, 0.0f, -1.0f},     {0.0f, 0.0f, -1.0f},     {0.0f, 0.0f,  0.0f} },
-		{ {1.0f, 0.0f, -1.0f},     {0.0f, 0.0f,  0.0f},     {1.0f, 0.0f,  0.0f} },
-	};
-	*/
 	testCube.LoadObjectFile(L"assets/Tea_Pot.obj");
 	projMatrix = PPG::Projection((float)ScreenWidth() / (float)ScreenHeight(), 90.0f, 0.1f, 1000.0f).GetPerspectiveProjection();
 	fTheta     = 0;
@@ -43,24 +21,32 @@ bool ConsoleEngine::OnUserCreate()
 
 bool ConsoleEngine::OnUserUpdate(float fElapsedTime)
 {
+
+
 	Fill(0, 0, ScreenWidth(), ScreenHeight(), PIXEL_SOLID, FG_BLACK);
 	
 	PPG::Math::mat4x4 translation;
 	PPG::Math::mat4x4 rotation;
-	PPG::Math::mat4x4 modelView;
+	PPG::Math::mat4x4 model;
 
+	translation.translate(PPG::Math::vec3(0.0f, 0.0f, -8.0f));
+	/*
+	rotation.rotate(180.0f, 0);
+	rotation.rotate( 90.0f, 1);
+	*/
+	/*
 	fTheta += 16.0f * fElapsedTime;
 	if (fTheta > 360.0f) fTheta -= 360.0f;
-	translation.translate(PPG::Math::vec3(0.0f, 2.0f, -8.0f));
-	//rotation.rotate(fTheta *  1.0f, 0);
-	//rotation.rotate(fTheta *  2.0f, 2);
+	rotation.rotate(fTheta *  1.0f, 0);
+	rotation.rotate(fTheta *  2.0f, 2);
+	*/
+	
 	rotation.rotate(205.0f, 0);
 	rotation.rotate(-25.0f, 1);
 	rotation.rotate( 10.0f, 2);
-	//rotation.rotate(fTheta * 5.0f, 1);
+	
 
-
-	modelView = translation * rotation;
+	model = translation * rotation;
 
 	// Preparing Drawing Buffer (Lack of Depth Buffer in Console Rendering Engine)
 	// Implemention of the "Painter's Algorithm"
@@ -70,18 +56,15 @@ bool ConsoleEngine::OnUserUpdate(float fElapsedTime)
 		PPG::Triangle projTri, worldTri;
 
 		// Transform triangles (primatives) into world space
-		worldTri.v[0] = (modelView * triangle.v[0].homogenize(1.0f)).cartesian();
-		worldTri.v[1] = (modelView * triangle.v[1].homogenize(1.0f)).cartesian();
-		worldTri.v[2] = (modelView * triangle.v[2].homogenize(1.0f)).cartesian();
-
+		worldTri = triangle * model;
+		
 		// Culling Routine of Triangle Primatives
-		PPG::Math::vec3 normal = (worldTri.v[1] - worldTri.v[0]).cross(worldTri.v[2] - worldTri.v[0]);
-		normal.normalize();
+		PPG::Math::vec3 normal = worldTri.Normal();
 
-		if (normal.anglebetween(PPG::Math::vec3(worldTri.v[0] - cameraPos)) < 90.0f)
+		if (normal.anglebetween(worldTri.ViewVector(cameraPos)) < 90.0f)
 		{
 			// Illumination (Shading)
-			PPG::Math::vec3 lightDir(1.0f, 1.0f, -1.0f);
+			PPG::Math::vec3 lightDir(0.0f, -1.0f, -1.0f);
 			lightDir.normalize();
 			float luminacity = normal * lightDir;
 			CHAR_INFO color = GetColour(luminacity);
@@ -89,24 +72,14 @@ bool ConsoleEngine::OnUserUpdate(float fElapsedTime)
 			worldTri.symbol = color.Char.UnicodeChar;
 
 			// Apply perspective projection to the triangles (transformation into pixel space / canonical view volume)
-			projTri.v[0] = (projMatrix * worldTri.v[0].homogenize(1.0f)).cartesian();
-			projTri.v[1] = (projMatrix * worldTri.v[1].homogenize(1.0f)).cartesian();
-			projTri.v[2] = (projMatrix * worldTri.v[2].homogenize(1.0f)).cartesian();
-			projTri.color = worldTri.color;
+			projTri = worldTri * projMatrix;
+			projTri.color  = worldTri.color;
 			projTri.symbol = worldTri.symbol;
-
-			// Scale pixels into view target size
-			projTri.v[0].x = (projTri.v[0].x + 1.0f) * 0.5f * (float)ScreenWidth();
-			projTri.v[0].y = (projTri.v[0].y + 1.0f) * 0.5f * (float)ScreenHeight();
-			projTri.v[1].x = (projTri.v[1].x + 1.0f) * 0.5f * (float)ScreenWidth();
-			projTri.v[1].y = (projTri.v[1].y + 1.0f) * 0.5f * (float)ScreenHeight();
-			projTri.v[2].x = (projTri.v[2].x + 1.0f) * 0.5f * (float)ScreenWidth();
-			projTri.v[2].y = (projTri.v[2].y + 1.0f) * 0.5f * (float)ScreenHeight();
-
+				
 			trianglesToRaster.push_back(projTri);
 		}
 	}
-
+	
 	// Sort triangles from back to front
 	std::sort(trianglesToRaster.begin(), 
 			  trianglesToRaster.end(), 
@@ -119,19 +92,21 @@ bool ConsoleEngine::OnUserUpdate(float fElapsedTime)
 
 	for (auto& tri : trianglesToRaster)
 	{
+		// Scale pixels into view target size
+		PPG::Triangle2D tri2D = tri.ImageCordinates((float)ScreenWidth(), (float)ScreenHeight());
+
 		// Fragment drawing (Pixel Rasterization)
-		FillTriangle(tri.v[0].x, tri.v[0].y,
-			tri.v[1].x, tri.v[1].y,
-			tri.v[2].x, tri.v[2].y,
+		FillTriangle((int)tri2D.v[0].x, (int)tri2D.v[0].y,
+					 (int)tri2D.v[1].x, (int)tri2D.v[1].y,
+				     (int)tri2D.v[2].x, (int)tri2D.v[2].y,
 			tri.symbol, tri.color);
 			
 		#ifdef WIREFRAME
-			DrawTriangle(tri.v[0].x, tri.v[0].y,
-				tri.v[1].x, tri.v[1].y,
-				tri.v[2].x, tri.v[2].y,
+			DrawTriangle((int)tri2D.v[0].x, (int)tri2D.v[0].y,
+						 (int)tri2D.v[1].x, (int)tri2D.v[1].y,
+						 (int)tri2D.v[2].x, (int)tri2D.v[2].y,
 				PIXEL_SOLID, FG_BLACK);
 		#endif
-
 	}
 
 	return true;

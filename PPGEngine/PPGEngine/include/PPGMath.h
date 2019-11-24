@@ -7,6 +7,7 @@ namespace PPG
 	namespace Math
 	{
 		const float PI = 3.1415927f;
+		struct vec2;
 		struct vec3;
 		struct vec4;
 		struct mat3x3;
@@ -18,35 +19,78 @@ namespace PPG
 			static float RadToDegree(float rad) { return rad * 180.0f / PI; }
 		};
 
+		struct vec2
+		{
+			union
+			{
+				struct { float x, y; };
+				struct { float u, v; };
+				float p[2] = { 0.0f, 0.0f };
+			};
+
+			vec2(float _x = 0.0f, float _y = 0.0f) : x{ _x }, y{ _y } {}
+
+			vec2(const vec2& _vec2) : x{ _vec2.x }, y{ _vec2.y } { }
+
+			vec2& operator=(const vec2& rhs);
+			float operator*(const vec2& rhs) const;
+			vec2  operator*(float scalar) const;
+			vec2  operator+(const vec2& rhs) const;
+			vec2  operator+(float scalar) const;
+			vec2  operator-(const vec2& rhs) const;
+			vec2  operator-(float scalar) const;
+			vec2  operator/(float scalar) const;
+			float operator[](int idx) const;
+			float magnitude() const;
+			float anglebetween(const vec2& rhs) const;
+			void  normalize();
+		};
+
 		struct vec3
 		{
-			float x, y, z;
+			union
+			{
+				struct { float x, y, z; };
+				struct { float u, v, w; };
+				struct { float pitch, yaw, roll;};
+				float p[3] = { 0.0f, 0.0f, 0.0f };
+			};
 
 			vec3(float _x = 0.0f, float _y = 0.0f, float _z = 0.0f) : x{ _x }, y{ _y }, z{ _z } {}
-
+			
 			vec3(const vec3& _vec3) : x{ _vec3.x }, y{ _vec3.y }, z{ _vec3.z } { }
 
 			vec3& operator=(const vec3& rhs);
 			float operator*(const vec3& rhs) const;
-			vec3  operator*(float scalar) const;
+			vec3  operator*(const float scalar) const;
+			vec3& operator*=(const float scalar);
 			vec3  operator+(const vec3& rhs) const;
-			vec3  operator+(float scalar) const;
+			vec3& operator+=(const vec3& rhs);
+			vec3  operator+(const float scalar) const;
+			vec3& operator+=(const float scalar);
 			vec3  operator-(const vec3& rhs) const;
-			vec3  operator-(float scalar) const;
-			vec3  operator/(float scalar) const;
-			float operator[](int idx) const;
+			vec3& operator-=(const vec3& rhs);
+			vec3  operator-(const float scalar) const;
+			vec3& operator-=(const float scalar);
+			vec3  operator/(const float scalar) const;
+			vec3& operator/=(const float scalar);
+			float operator[](const int idx) const;
 			vec3  cross(const vec3& rhs) const;
 			vec3  outer(const vec3& rhs) const;
 			float magnitude() const;
 			float anglebetween(const vec3& rhs) const;
-			vec4  homogenize(float w) const;
+			vec4  homogenize(const float w) const;
 			void  normalize();
 
 		};
 
 		struct vec4
 		{
-			float x, y, z, w;
+			union
+			{
+				struct { float x, y, z, w; };
+				float p[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+			};
 
 			vec4(float _x = 0.0f, float _y = 0.0f, float _z = 0.0f, float _w = 0.0f) : x{ _x }, y{ _y }, z{ _z }, w{ _w } {}
 
@@ -56,13 +100,19 @@ namespace PPG
 
 			vec4& operator=(const vec4& rhs);
 			float operator*(const vec4& rhs) const;
-			vec4  operator*(float scalar) const;
+			vec4  operator*(const float scalar) const;
+			vec4& operator*=(const float scalar);
 			vec4  operator+(const vec4& rhs) const;
-			vec4  operator+(float scalar) const;
+			vec4& operator+=(const vec4& rhs);
+			vec4  operator+(const float scalar) const;
+			vec4& operator+=(const float scalar);
 			vec4  operator-(const vec4& rhs) const;
-			vec4  operator-(float scalar) const;
-			vec4  operator/(float scalar) const;
-			float operator[](int idx) const;
+			vec4& operator-=(const vec4& rhs);
+			vec4  operator-(const float scalar) const;
+			vec4& operator-=(const float scalar);
+			vec4  operator/(const float scalar) const;
+			vec4& operator/=(const float scalar);
+			float operator[](const int idx) const;
 			vec4  outer(const vec4& rhs) const;
 			vec3  cartesian();
 			void  homogenize();

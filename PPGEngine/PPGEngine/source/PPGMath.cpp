@@ -1,5 +1,111 @@
 #include "PPGMath.h"
 
+PPG::Math::vec2 & PPG::Math::vec2::operator=(const vec2 & rhs)
+{
+	x = rhs.x;
+	y = rhs.y;
+
+	return *this;
+}
+
+float PPG::Math::vec2::operator*(const vec2 & rhs) const
+{
+	float result = 0;
+	result += this->x * rhs.x;
+	result += this->y * rhs.y;
+
+	return result;
+}
+
+PPG::Math::vec2 PPG::Math::vec2::operator*(const float scalar) const
+{
+	vec2 result;
+	result.x = this->x*scalar;
+	result.y = this->y*scalar;
+
+	return result;
+}
+
+PPG::Math::vec2 PPG::Math::vec2::operator+(const vec2 & rhs) const
+{
+	vec2 result;
+	result.x = this->x + rhs.x;
+	result.y = this->y + rhs.y;
+
+	return result;
+}
+
+
+PPG::Math::vec2 PPG::Math::vec2::operator+(const float scalar) const
+{
+	vec2 result;
+	result.x = this->x + scalar;
+	result.y = this->y + scalar;
+
+	return result;
+}
+
+PPG::Math::vec2 PPG::Math::vec2::operator-(const vec2 & rhs) const
+{
+	vec2 result;
+	result.x = this->x - rhs.x;
+	result.y = this->y - rhs.y;
+
+	return result;
+}
+
+PPG::Math::vec2 PPG::Math::vec2::operator-(const float scalar) const
+{
+	vec2 result;
+	result.x = this->x - scalar;
+	result.y = this->y - scalar;
+
+	return result;
+}
+
+PPG::Math::vec2 PPG::Math::vec2::operator/(const float scalar) const
+{
+	vec2 result;
+	result.x = this->x / scalar;
+	result.y = this->y / scalar;
+
+	return result;
+}
+
+float PPG::Math::vec2::operator[](int idx) const
+{
+	if (idx == 0)
+	{
+		return x;
+	}
+	else if (idx == 1)
+	{
+		return y;
+	}
+}
+
+float PPG::Math::vec2::magnitude() const
+{
+	return sqrt(x * x + y * y);
+}
+
+float PPG::Math::vec2::anglebetween(const vec2 & rhs) const
+{
+	float product = (*this) * rhs;
+	float angle = acosf(product / (this->magnitude() * rhs.magnitude()));
+	return Conversions::RadToDegree(angle);
+}
+
+void PPG::Math::vec2::normalize()
+{
+	float magnitude = std::sqrt(x*x + y * y);
+	if (magnitude != 0.0f)
+	{
+		x /= magnitude; y /= magnitude;
+	}
+}
+ 
+
 PPG::Math::vec3& PPG::Math::vec3::operator=(const vec3& rhs)
 {
 	x = rhs.x;
@@ -19,7 +125,7 @@ float PPG::Math::vec3::operator*(const vec3& rhs) const
 	return result;
 }
 
-PPG::Math::vec3 PPG::Math::vec3::operator*(float scalar) const
+PPG::Math::vec3 PPG::Math::vec3::operator*(const float scalar) const
 {
 	vec3 result;
 	result.x = this->x*scalar;
@@ -27,6 +133,15 @@ PPG::Math::vec3 PPG::Math::vec3::operator*(float scalar) const
 	result.z = this->z*scalar;
 
 	return result;
+}
+
+PPG::Math::vec3& PPG::Math::vec3::operator*=(const float scalar)
+{
+	this->x *= scalar;
+	this->y *= scalar;
+	this->z *= scalar;
+
+	return *this;
 }
 
 PPG::Math::vec3 PPG::Math::vec3::operator+(const vec3& rhs) const
@@ -39,7 +154,16 @@ PPG::Math::vec3 PPG::Math::vec3::operator+(const vec3& rhs) const
 	return result;
 }
 
-PPG::Math::vec3 PPG::Math::vec3::operator+(float scalar) const
+PPG::Math::vec3& PPG::Math::vec3::operator+=(const vec3 & rhs)
+{
+	this->x += rhs.x;
+	this->y += rhs.y;
+	this->z += rhs.z;
+
+	return *this;
+}
+
+PPG::Math::vec3 PPG::Math::vec3::operator+(const float scalar) const
 {
 	vec3 result;
 	result.x = this->x + scalar;
@@ -47,6 +171,15 @@ PPG::Math::vec3 PPG::Math::vec3::operator+(float scalar) const
 	result.z = this->z + scalar;
 
 	return result;
+}
+
+PPG::Math::vec3& PPG::Math::vec3::operator+=(const float scalar)
+{
+	this->x += scalar;
+	this->y += scalar;
+	this->z += scalar;
+
+	return *this;
 }
 
 PPG::Math::vec3 PPG::Math::vec3::operator-(const vec3 & rhs) const
@@ -59,7 +192,16 @@ PPG::Math::vec3 PPG::Math::vec3::operator-(const vec3 & rhs) const
 	return result;
 }
 
-PPG::Math::vec3 PPG::Math::vec3::operator-(float scalar) const
+PPG::Math::vec3& PPG::Math::vec3::operator-=(const vec3 & rhs)
+{
+	this->x -= rhs.x;
+	this->y -= rhs.y;
+	this->z -= rhs.z;
+
+	return *this;
+}
+
+PPG::Math::vec3 PPG::Math::vec3::operator-(const float scalar) const
 {
 	vec3 result;
 	result.x = this->x - scalar;
@@ -69,7 +211,16 @@ PPG::Math::vec3 PPG::Math::vec3::operator-(float scalar) const
 	return result;
 }
 
-PPG::Math::vec3 PPG::Math::vec3::operator/(float scalar) const
+PPG::Math::vec3& PPG::Math::vec3::operator-=(const float scalar)
+{
+	this->x += scalar;
+	this->y += scalar;
+	this->z += scalar;
+
+	return *this;
+}
+
+PPG::Math::vec3 PPG::Math::vec3::operator/(const float scalar) const
 {
 	vec3 result;
 	result.x = this->x / scalar;
@@ -77,6 +228,15 @@ PPG::Math::vec3 PPG::Math::vec3::operator/(float scalar) const
 	result.z = this->z / scalar;
 
 	return result;
+}
+
+PPG::Math::vec3& PPG::Math::vec3::operator/=(const float scalar)
+{
+	this->x /= scalar;
+	this->y /= scalar;
+	this->z /= scalar;
+
+	return *this;
 }
 
 float PPG::Math::vec3::operator[](int idx) const
@@ -135,7 +295,7 @@ float PPG::Math::vec3::anglebetween(const vec3 & rhs) const
 	return Conversions::RadToDegree(angle);
 }
 
-PPG::Math::vec4 PPG::Math::vec3::homogenize(float w) const
+PPG::Math::vec4 PPG::Math::vec3::homogenize(const float w) const
 {
 	vec4 result;
 	result.x = x;
@@ -167,7 +327,7 @@ float PPG::Math::vec4::operator*(const vec4& rhs) const
 	return result;
 }
 
-PPG::Math::vec4 PPG::Math::vec4::operator*(float scalar) const
+PPG::Math::vec4 PPG::Math::vec4::operator*(const float scalar) const
 {
 	vec4 result;
 	result.x = this->x*scalar;
@@ -176,6 +336,16 @@ PPG::Math::vec4 PPG::Math::vec4::operator*(float scalar) const
 	result.w = this->w*scalar;
 
 	return result;
+}
+
+PPG::Math::vec4& PPG::Math::vec4::operator*=(const float scalar)
+{
+	this->x *= scalar;
+	this->y *= scalar;
+	this->z *= scalar;
+	this->w *= scalar;
+
+	return *this;
 }
 
 PPG::Math::vec4 PPG::Math::vec4::operator+(const vec4& rhs) const
@@ -189,7 +359,17 @@ PPG::Math::vec4 PPG::Math::vec4::operator+(const vec4& rhs) const
 	return result;
 }
 
-PPG::Math::vec4 PPG::Math::vec4::operator+(float scalar) const
+PPG::Math::vec4& PPG::Math::vec4::operator+=(const vec4 & rhs)
+{
+	this->x += rhs.x;
+	this->y += rhs.y;
+	this->z += rhs.z;
+	this->w += rhs.w;
+
+	return *this;
+}
+
+PPG::Math::vec4 PPG::Math::vec4::operator+(const float scalar) const
 {
 	vec4 result;
 	result.x = this->x + scalar;
@@ -198,6 +378,16 @@ PPG::Math::vec4 PPG::Math::vec4::operator+(float scalar) const
 	result.w = this->w + scalar;
 
 	return result;
+}
+
+PPG::Math::vec4& PPG::Math::vec4::operator+=(const float scalar)
+{
+	this->x += scalar;
+	this->y += scalar;
+	this->z += scalar;
+	this->w += scalar;
+
+	return *this;
 }
 
 PPG::Math::vec4 PPG::Math::vec4::operator-(const vec4 & rhs) const
@@ -211,7 +401,17 @@ PPG::Math::vec4 PPG::Math::vec4::operator-(const vec4 & rhs) const
 	return result;
 }
 
-PPG::Math::vec4 PPG::Math::vec4::operator-(float scalar) const
+PPG::Math::vec4& PPG::Math::vec4::operator-=(const vec4 & rhs)
+{
+	this->x -= rhs.x;
+	this->y -= rhs.y;
+	this->z -= rhs.z;
+	this->w -= rhs.w;
+
+	return *this;
+}
+
+PPG::Math::vec4 PPG::Math::vec4::operator-(const float scalar) const
 {
 	vec4 result;
 	result.x = this->x - scalar;
@@ -222,7 +422,17 @@ PPG::Math::vec4 PPG::Math::vec4::operator-(float scalar) const
 	return result;
 }
 
-PPG::Math::vec4 PPG::Math::vec4::operator/(float scalar) const
+PPG::Math::vec4 & PPG::Math::vec4::operator-=(const float scalar)
+{
+	this->x -= scalar;
+	this->y -= scalar;
+	this->z -= scalar;
+	this->w -= scalar;
+
+	return *this;
+}
+
+PPG::Math::vec4 PPG::Math::vec4::operator/(const float scalar) const
 {
 	vec4 result;
 	result.x = this->x / scalar;
@@ -231,6 +441,16 @@ PPG::Math::vec4 PPG::Math::vec4::operator/(float scalar) const
 	result.w = this->w / scalar;
 
 	return result;
+}
+
+PPG::Math::vec4 & PPG::Math::vec4::operator/=(const float scalar)
+{
+	this->x /= scalar;
+	this->y /= scalar;
+	this->z /= scalar;
+	this->w /= scalar;
+
+	return *this;
 }
 
 float PPG::Math::vec4::operator[](int idx) const
@@ -311,7 +531,7 @@ PPG::Math::vec3 PPG::Math::mat3x3::operator*(const vec3 & rhs) const
 	return result;
 }
 
-PPG::Math::mat3x3 PPG::Math::mat3x3::operator*(float scalar) const
+PPG::Math::mat3x3 PPG::Math::mat3x3::operator*(const float scalar) const
 {
 	mat3x3 result;
 	result.a11 *= scalar; result.a12 *= scalar; result.a13 *= scalar;
@@ -358,7 +578,7 @@ PPG::Math::vec3 PPG::Math::mat3x3::operator[](const int idx) const
 	return result;
 }
 
-void PPG::Math::mat3x3::rotate(float angle, int axis)
+void PPG::Math::mat3x3::rotate(const float angle, int axis)
 {
 	float  angleRadian =  angle * PI / 180.0f;
 	mat3x3 rotation;
@@ -403,7 +623,7 @@ PPG::Math::vec4 PPG::Math::mat4x4::operator*(const vec4 & rhs) const
 	return result;
 }
 
-PPG::Math::mat4x4 PPG::Math::mat4x4::operator*(float scalar) const
+PPG::Math::mat4x4 PPG::Math::mat4x4::operator*(const float scalar) const
 {
 	mat4x4 result;
 	result.a11 *= scalar; result.a12 *= scalar; result.a13 *= scalar; result.a14 *= scalar;
@@ -463,7 +683,7 @@ PPG::Math::vec4 PPG::Math::mat4x4::operator[](int idx) const
 	return result;
 }
 
-void PPG::Math::mat4x4::rotate(float angle, int axis)
+void PPG::Math::mat4x4::rotate(const float angle, int axis)
 {
 	mat3x3 currentR;
 	currentR.a11 = a11; currentR.a12 = a12; currentR.a13 = a13;
@@ -486,6 +706,10 @@ void PPG::Math::mat4x4::rotate(float angle, int axis)
 
 void PPG::Math::mat4x4::translate(vec3 distance)
 {
+	a11 += distance.x * a41; a12 += distance.x * a42; a13 += distance.x * a43;
+	a21 += distance.y * a41; a22 += distance.y * a42; a23 += distance.y * a43;
+	a31 += distance.z * a41; a32 += distance.z * a42; a33 += distance.z * a43;
+
 	a14 += distance.x;
 	a24 += distance.y;
 	a34 += distance.z;
