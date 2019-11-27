@@ -12,6 +12,7 @@ typedef olcConsoleGameEngineGLOOP olcConsoleGameEngineOOP;
 #include <algorithm>
 
 #include "Mesh.h"
+#include "Camera.h"
 #include "Projection.h"
 
 class ConsoleEngine : public olcConsoleGameEngineOOP
@@ -28,6 +29,6 @@ private:
 private:
 	float             fTheta;
 	PPG::Mesh         testCube;
-	PPG::Math::vec3   cameraPos;
+	PPG::Camera       fpsCamera;
 	PPG::Math::mat4x4 projMatrix;
 };

@@ -12,8 +12,37 @@ ConsoleEngine::ConsoleEngine(std::wstring windowTitle)
 
 bool ConsoleEngine::OnUserCreate()
 {	
-	testCube.LoadObjectFile(L"assets/Tea_Pot.obj");
+	testCube.LoadObjectFile(L"assets/Debugging_Axis.obj");
+	/*
+	testCube.mesh = std::vector< PPG::Triangle>{
+
+		//// SOUTH
+		{ {0.0f, 0.0f, 0.0f},    {0.0f, 1.0f, 0.0f},    {1.0f, 1.0f, 0.0f} },
+		{ {0.0f, 0.0f, 0.0f},    {1.0f, 1.0f, 0.0f},    {1.0f, 0.0f, 0.0f} },
+
+		//// EAST                                                      
+		{ {1.0f, 0.0f, 0.0f},    {1.0f, 1.0f, 0.0f},    {1.0f, 1.0f, 1.0f} },
+		{ {1.0f, 0.0f, 0.0f},    {1.0f, 1.0f, 1.0f},    {1.0f, 0.0f, 1.0f} },
+
+		//// NORTH                                                     
+		{ {1.0f, 0.0f, 1.0f},    {1.0f, 1.0f, 1.0f},    {0.0f, 1.0f, 1.0f} },
+		{ {1.0f, 0.0f, 1.0f},    {0.0f, 1.0f, 1.0f},    {0.0f, 0.0f, 1.0f} },
+
+		//// WEST                                                      
+		{ {0.0f, 0.0f, 1.0f},    {0.0f, 1.0f, 1.0f},    {0.0f, 1.0f, 0.0f} },
+		{ {0.0f, 0.0f, 1.0f},    {0.0f, 1.0f, 0.0f},    {0.0f, 0.0f, 0.0f} },
+
+		//// TOP                                                       
+		{ {0.0f, 1.0f, 0.0f},    {0.0f, 1.0f, 1.0f},    {1.0f, 1.0f, 1.0f} },
+		{ {0.0f, 1.0f, 0.0f},    {1.0f, 1.0f, 1.0f},    {1.0f, 1.0f, 0.0f} },
+
+		//// BOTTOM                                                    
+		{ {1.0f, 0.0f, 1.0f},    {0.0f, 0.0f, 1.0f},    {0.0f, 0.0f, 0.0f} },
+		{ {1.0f, 0.0f, 1.0f},    {0.0f, 0.0f, 0.0f},    {1.0f, 0.0f, 0.0f} },
+	};
+	*/
 	projMatrix = PPG::Projection((float)ScreenWidth() / (float)ScreenHeight(), 90.0f, 0.1f, 1000.0f).GetPerspectiveProjection();
+	fpsCamera  = PPG::Camera(PPG::Math::vec3(0.0f, 0.0f, 0.0f), PPG::Math::vec3(0.0f, 1.0f, 0.0f), 5.0f, 20.0f);
 	fTheta     = 0;
 
 	return true;
@@ -21,32 +50,40 @@ bool ConsoleEngine::OnUserCreate()
 
 bool ConsoleEngine::OnUserUpdate(float fElapsedTime)
 {
-
+	if (GetKey(VK_SPACE).bHeld)
+		fpsCamera.ResetCamera();
+	if (GetKey(L'W').bHeld)
+		fpsCamera.MoveCamera(fpsCamera.getForwardDir() * fElapsedTime);
+	if (GetKey(L'S').bHeld)
+		fpsCamera.MoveCamera(fpsCamera.getForwardDir() * -1.0f * fElapsedTime);
+	if (GetKey(L'A').bHeld)
+		fpsCamera.MoveCamera(fpsCamera.getRightDir() * fElapsedTime);
+	if (GetKey(L'D').bHeld)
+		fpsCamera.MoveCamera(fpsCamera.getRightDir() * -1.0f * fElapsedTime);
+	if (GetKey(L'Q').bHeld)
+		fpsCamera.MoveCamera(fpsCamera.getWorldUpDir() * fElapsedTime);
+	if (GetKey(L'E').bHeld)
+		fpsCamera.MoveCamera(fpsCamera.getWorldUpDir() * - 1.0f * fElapsedTime);
+	if (GetKey(VK_UP).bHeld)
+		fpsCamera.TiltCamera(1.0f * fElapsedTime);
+	if (GetKey(VK_DOWN).bHeld)
+		fpsCamera.TiltCamera(-1.0f * fElapsedTime);
+	if (GetKey(VK_LEFT).bHeld)
+		fpsCamera.PanCamera(1.0f * fElapsedTime);
+	if (GetKey(VK_RIGHT).bHeld)
+		fpsCamera.PanCamera(-1.0f * fElapsedTime);
 
 	Fill(0, 0, ScreenWidth(), ScreenHeight(), PIXEL_SOLID, FG_BLACK);
 	
-	PPG::Math::mat4x4 translation;
-	PPG::Math::mat4x4 rotation;
-	PPG::Math::mat4x4 model;
+	PPG::Math::mat4x4 translation, rotation, model, view, modelView;
 
-	translation.translate(PPG::Math::vec3(0.0f, 0.0f, -8.0f));
-	/*
-	rotation.rotate(180.0f, 0);
-	rotation.rotate( 90.0f, 1);
-	*/
-	/*
-	fTheta += 16.0f * fElapsedTime;
-	if (fTheta > 360.0f) fTheta -= 360.0f;
-	rotation.rotate(fTheta *  1.0f, 0);
-	rotation.rotate(fTheta *  2.0f, 2);
-	*/
-	
-	rotation.rotate(205.0f, 0);
-	rotation.rotate(-25.0f, 1);
-	rotation.rotate( 10.0f, 2);
-	
-
-	model = translation * rotation;
+	translation.translate(PPG::Math::vec3(0.0f, 0.0f, -18.0f));	
+	//rotation.rotate(90.0f, 0);
+	//rotation.rotate(180.0f, 1);
+	//rotation.rotate( 90.0f, 2);
+	model  = (translation * rotation);
+	view = fpsCamera.getViewMatrix();
+	modelView =  view * model;
 
 	// Preparing Drawing Buffer (Lack of Depth Buffer in Console Rendering Engine)
 	// Implemention of the "Painter's Algorithm"
@@ -56,12 +93,12 @@ bool ConsoleEngine::OnUserUpdate(float fElapsedTime)
 		PPG::Triangle projTri, worldTri;
 
 		// Transform triangles (primatives) into world space
-		worldTri = triangle * model;
-		
+		worldTri = triangle * modelView;
+
 		// Culling Routine of Triangle Primatives
 		PPG::Math::vec3 normal = worldTri.Normal();
 
-		if (normal.anglebetween(worldTri.ViewVector(cameraPos)) < 90.0f)
+		if (normal.anglebetween(worldTri.ViewVector(fpsCamera.getCameraPos())) < 90.0f)
 		{
 			// Illumination (Shading)
 			PPG::Math::vec3 lightDir(0.0f, -1.0f, -1.0f);
@@ -97,10 +134,10 @@ bool ConsoleEngine::OnUserUpdate(float fElapsedTime)
 
 		// Fragment drawing (Pixel Rasterization)
 		FillTriangle((int)tri2D.v[0].x, (int)tri2D.v[0].y,
-					 (int)tri2D.v[1].x, (int)tri2D.v[1].y,
-				     (int)tri2D.v[2].x, (int)tri2D.v[2].y,
-			tri.symbol, tri.color);
-			
+			(int)tri2D.v[1].x, (int)tri2D.v[1].y,
+			(int)tri2D.v[2].x, (int)tri2D.v[2].y,
+			//tri.symbol, tri.color);
+			PIXEL_SOLID, FG_WHITE);
 		#ifdef WIREFRAME
 			DrawTriangle((int)tri2D.v[0].x, (int)tri2D.v[0].y,
 						 (int)tri2D.v[1].x, (int)tri2D.v[1].y,

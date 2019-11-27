@@ -645,12 +645,12 @@ PPG::Math::mat4x4 PPG::Math::mat4x4::operator*(const mat4x4 & rhs) const
 	result.a21 = a21 * rhs.a11 + a22 * rhs.a21 + a23 * rhs.a31 + a24 * rhs.a41;
 	result.a22 = a21 * rhs.a12 + a22 * rhs.a22 + a23 * rhs.a32 + a24 * rhs.a42;
 	result.a23 = a21 * rhs.a13 + a22 * rhs.a23 + a23 * rhs.a33 + a24 * rhs.a43;
-	result.a24 = a11 * rhs.a14 + a12 * rhs.a24 + a13 * rhs.a34 + a24 * rhs.a44; 
+	result.a24 = a21 * rhs.a14 + a22 * rhs.a24 + a23 * rhs.a34 + a24 * rhs.a44; 
 	
 	result.a31 = a31 * rhs.a11 + a32 * rhs.a21 + a33 * rhs.a31 + a34 * rhs.a41;
 	result.a32 = a31 * rhs.a12 + a32 * rhs.a22 + a33 * rhs.a32 + a34 * rhs.a42;
 	result.a33 = a31 * rhs.a13 + a32 * rhs.a23 + a33 * rhs.a33 + a34 * rhs.a43;
-	result.a34 = a11 * rhs.a14 + a12 * rhs.a24 + a13 * rhs.a34 + a34 * rhs.a44;
+	result.a34 = a31 * rhs.a14 + a32 * rhs.a24 + a33 * rhs.a34 + a34 * rhs.a44;
 
 	result.a41 = a41 * rhs.a11 + a42 * rhs.a21 + a43 * rhs.a31 + a44 * rhs.a41;
 	result.a42 = a41 * rhs.a12 + a42 * rhs.a22 + a43 * rhs.a32 + a44 * rhs.a42;
