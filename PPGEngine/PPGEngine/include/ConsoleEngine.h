@@ -1,10 +1,12 @@
 #pragma once
-#define GENERIC
+#define GL
+#define TEXTURED
+//#define FLATSHADING
 //#define WIREFRAME
 
 #if defined(GL)
 	#include "OLCConsoleWindowInterfaceGL.h"
-typedef olcConsoleGameEngineGLOOP olcConsoleGameEngineOOP;
+	typedef olcConsoleGameEngineGLOOP olcConsoleGameEngineOOP;
 #elif defined(GENERIC)
 	#include "OLCConsoleWindowInterface.h"
 #endif
@@ -24,11 +26,16 @@ public:
 	bool OnUserUpdate(float fElapsedTine) override;
 
 private:
-	CHAR_INFO GetColour(float lum);
+	void clearDepthBuffer();
 
 private:
-	float             fTheta;
-	PPG::Mesh         testCube;
-	PPG::Camera       fpsCamera;
-	PPG::Math::mat4x4 projMatrix;
+	float                   nearPlanePos;
+	float                   farPlanePos;
+	float*                  depthBuffer;
+	olcSprite*              texture;
+	PPG::Mesh               meshedGeo;
+	PPG::Camera             fpsCamera;
+	PPG::Math::mat4x4		projMatrix;
+	std::vector<PPG::Plane> ssClipPlanes;
+	std::vector<PPG::Plane> nfClipPlanes;
 };

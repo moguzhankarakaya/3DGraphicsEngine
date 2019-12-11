@@ -98,9 +98,9 @@ void PPG::Camera::updateCamera()
 	front.z = -1 * cos(Math::Conversions::DegreeToRad(yaw)) * cos(Math::Conversions::DegreeToRad(pitch));
 	front.normalize();
 	
-	right = front.cross(worldUp);
+	right = worldUp.cross(front);
 	right.normalize();
 
-	up = right.cross(front);
+	up = front.cross(right);
 	up.normalize();
 }

@@ -280,6 +280,7 @@ public:
 	olcConsoleGameEngineGLOOP();
 	int ConstructConsole(int width, int height, int fontw, int fonth);
 	virtual void Draw(int x, int y, wchar_t c = 0x2588, short col = 0x000F);
+	CHAR_INFO GetColour(float lum);
 	void Fill(int x1, int y1, int x2, int y2, wchar_t c = 0x2588, short col = 0x000F);
 	void DrawString(int x, int y, wstring c, short col = 0x000F);
 	void DrawStringAlpha(int x, int y, wstring c, short col = 0x000F);
@@ -288,6 +289,7 @@ public:
 	void DrawCircle(int xc, int yc, int r, wchar_t c = 0x2588, short col = 0x000F);
 	void DrawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, short c = 0x2588, short col = 0x000F);
 	void FillTriangle(int x1, int y1, int x2, int y2, int x3, int y3, short c = 0x2588, short col = 0x000F);
+	void TexturedTriangle(int x1, int y1, float u1, float v1, float w1, int x2, int y2, float u2, float v2, float w2, int x3, int y3, float u3, float v3, float w3, float* depthBuffer, olcSprite *tex);
 	void FillCircle(int xc, int yc, int r, wchar_t c = 0x2588, short col = 0x000F);
 	void DrawSprite(int x, int y, olcSprite *sprite);
 	void DrawPartialSprite(int x, int y, olcSprite *sprite, int ox, int oy, int w, int h);

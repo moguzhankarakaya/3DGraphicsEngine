@@ -7,7 +7,7 @@
 int main()
 {
 	ConsoleEngine window;
-	if(window.ConstructConsole(256,252,4,4))
+	if(window.ConstructConsole(256*2, 252*2, 2, 2))
 	{ 
 		window.Start();
 	}

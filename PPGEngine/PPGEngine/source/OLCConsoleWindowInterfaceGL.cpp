@@ -570,6 +570,39 @@ void olcConsoleGameEngineGLOOP::Draw(int x, int y, wchar_t c, short col)
 	}
 }
 
+CHAR_INFO olcConsoleGameEngineGLOOP::GetColour(float lum)
+{
+	short bg_col, fg_col;
+	wchar_t sym;
+	int pixel_bw = (int)(12.0f*lum);
+	switch (pixel_bw)
+	{
+	case 0: bg_col = BG_BLACK; fg_col = FG_BLACK; sym = PIXEL_SOLID; break;
+
+	case 1: bg_col = BG_BLACK; fg_col = FG_DARK_GREY; sym = PIXEL_QUARTER; break;
+	case 2: bg_col = BG_BLACK; fg_col = FG_DARK_GREY; sym = PIXEL_HALF; break;
+	case 3: bg_col = BG_BLACK; fg_col = FG_DARK_GREY; sym = PIXEL_THREEQUARTERS; break;
+	case 4: bg_col = BG_BLACK; fg_col = FG_DARK_GREY; sym = PIXEL_SOLID; break;
+
+	case 5: bg_col = BG_DARK_GREY; fg_col = FG_GREY; sym = PIXEL_QUARTER; break;
+	case 6: bg_col = BG_DARK_GREY; fg_col = FG_GREY; sym = PIXEL_HALF; break;
+	case 7: bg_col = BG_DARK_GREY; fg_col = FG_GREY; sym = PIXEL_THREEQUARTERS; break;
+	case 8: bg_col = BG_DARK_GREY; fg_col = FG_GREY; sym = PIXEL_SOLID; break;
+
+	case 9:  bg_col = BG_GREY; fg_col = FG_WHITE; sym = PIXEL_QUARTER; break;
+	case 10: bg_col = BG_GREY; fg_col = FG_WHITE; sym = PIXEL_HALF; break;
+	case 11: bg_col = BG_GREY; fg_col = FG_WHITE; sym = PIXEL_THREEQUARTERS; break;
+	case 12: bg_col = BG_GREY; fg_col = FG_WHITE; sym = PIXEL_SOLID; break;
+	default:
+		bg_col = BG_BLACK; fg_col = FG_BLACK; sym = PIXEL_SOLID;
+	}
+
+	CHAR_INFO c;
+	c.Attributes = bg_col | fg_col;
+	c.Char.UnicodeChar = sym;
+	return c;
+}
+
 void olcConsoleGameEngineGLOOP::Fill(int x1, int y1, int x2, int y2, wchar_t c, short col)
 {
 	Clip(x1, y1);
@@ -848,6 +881,172 @@ next:
 	}
 }
 
+void olcConsoleGameEngineGLOOP::TexturedTriangle(int x1, int y1, float u1, float v1, float w1, int x2, int y2, float u2, float v2, float w2, int x3, int y3, float u3, float v3, float w3, float * depthBuffer, olcSprite * tex)
+{
+	if (y2 < y1)
+	{
+		swap(y1, y2);
+		swap(x1, x2);
+		swap(u1, u2);
+		swap(v1, v2);
+		swap(w1, w2);
+	}
+
+	if (y3 < y1)
+	{
+		swap(y1, y3);
+		swap(x1, x3);
+		swap(u1, u3);
+		swap(v1, v3);
+		swap(w1, w3);
+	}
+
+	if (y3 < y2)
+	{
+		swap(y2, y3);
+		swap(x2, x3);
+		swap(u2, u3);
+		swap(v2, v3);
+		swap(w2, w3);
+	}
+
+	int dy1 = y2 - y1;
+	int dx1 = x2 - x1;
+	float dv1 = v2 - v1;
+	float du1 = u2 - u1;
+	float dw1 = w2 - w1;
+
+	int dy2 = y3 - y1;
+	int dx2 = x3 - x1;
+	float dv2 = v3 - v1;
+	float du2 = u3 - u1;
+	float dw2 = w3 - w1;
+
+	float tex_u, tex_v, tex_w;
+
+	float dax_step = 0, dbx_step = 0,
+		du1_step = 0, dv1_step = 0,
+		du2_step = 0, dv2_step = 0,
+		dw1_step = 0, dw2_step = 0;
+
+	if (dy1) dax_step = dx1 / (float)abs(dy1);
+	if (dy2) dbx_step = dx2 / (float)abs(dy2);
+
+	if (dy1) du1_step = du1 / (float)abs(dy1);
+	if (dy1) dv1_step = dv1 / (float)abs(dy1);
+	if (dy1) dw1_step = dw1 / (float)abs(dy1);
+
+	if (dy2) du2_step = du2 / (float)abs(dy2);
+	if (dy2) dv2_step = dv2 / (float)abs(dy2);
+	if (dy2) dw2_step = dw2 / (float)abs(dy2);
+
+	if (dy1)
+	{
+		for (int i = y1; i <= y2; i++)
+		{
+			int ax = x1 + (float)(i - y1) * dax_step;
+			int bx = x1 + (float)(i - y1) * dbx_step;
+
+			float tex_su = u1 + (float)(i - y1) * du1_step;
+			float tex_sv = v1 + (float)(i - y1) * dv1_step;
+			float tex_sw = w1 + (float)(i - y1) * dw1_step;
+
+			float tex_eu = u1 + (float)(i - y1) * du2_step;
+			float tex_ev = v1 + (float)(i - y1) * dv2_step;
+			float tex_ew = w1 + (float)(i - y1) * dw2_step;
+
+			if (ax > bx)
+			{
+				swap(ax, bx);
+				swap(tex_su, tex_eu);
+				swap(tex_sv, tex_ev);
+				swap(tex_sw, tex_ew);
+			}
+
+			tex_u = tex_su;
+			tex_v = tex_sv;
+			tex_w = tex_sw;
+
+			float tstep = 1.0f / ((float)(bx - ax));
+			float t = 0.0f;
+
+			for (int j = ax; j < bx; j++)
+			{
+				tex_u = (1.0f - t) * tex_su + t * tex_eu;
+				tex_v = (1.0f - t) * tex_sv + t * tex_ev;
+				tex_w = (1.0f - t) * tex_sw + t * tex_ew;
+				if (tex_w > depthBuffer[i*ScreenWidth() + j])
+				{
+					Draw(j, i, tex->SampleGlyph(tex_u / tex_w, tex_v / tex_w), tex->SampleColour(tex_u / tex_w, tex_v / tex_w));
+					depthBuffer[i*ScreenWidth() + j] = tex_w;
+				}
+				t += tstep;
+			}
+
+		}
+	}
+
+	dy1 = y3 - y2;
+	dx1 = x3 - x2;
+	dv1 = v3 - v2;
+	du1 = u3 - u2;
+	dw1 = w3 - w2;
+
+	if (dy1) dax_step = dx1 / (float)abs(dy1);
+	if (dy2) dbx_step = dx2 / (float)abs(dy2);
+
+	du1_step = 0, dv1_step = 0;
+	if (dy1) du1_step = du1 / (float)abs(dy1);
+	if (dy1) dv1_step = dv1 / (float)abs(dy1);
+	if (dy1) dw1_step = dw1 / (float)abs(dy1);
+
+	if (dy1)
+	{
+		for (int i = y2; i <= y3; i++)
+		{
+			int ax = x2 + (float)(i - y2) * dax_step;
+			int bx = x1 + (float)(i - y1) * dbx_step;
+
+			float tex_su = u2 + (float)(i - y2) * du1_step;
+			float tex_sv = v2 + (float)(i - y2) * dv1_step;
+			float tex_sw = w2 + (float)(i - y2) * dw1_step;
+
+			float tex_eu = u1 + (float)(i - y1) * du2_step;
+			float tex_ev = v1 + (float)(i - y1) * dv2_step;
+			float tex_ew = w1 + (float)(i - y1) * dw2_step;
+
+			if (ax > bx)
+			{
+				swap(ax, bx);
+				swap(tex_su, tex_eu);
+				swap(tex_sv, tex_ev);
+				swap(tex_sw, tex_ew);
+			}
+
+			tex_u = tex_su;
+			tex_v = tex_sv;
+			tex_w = tex_sw;
+
+			float tstep = 1.0f / ((float)(bx - ax));
+			float t = 0.0f;
+
+			for (int j = ax; j < bx; j++)
+			{
+				tex_u = (1.0f - t) * tex_su + t * tex_eu;
+				tex_v = (1.0f - t) * tex_sv + t * tex_ev;
+				tex_w = (1.0f - t) * tex_sw + t * tex_ew;
+
+				if (tex_w > depthBuffer[i*ScreenWidth() + j])
+				{
+					Draw(j, i, tex->SampleGlyph(tex_u / tex_w, tex_v / tex_w), tex->SampleColour(tex_u / tex_w, tex_v / tex_w));
+					depthBuffer[i*ScreenWidth() + j] = tex_w;
+				}
+				t += tstep;
+			}
+		}
+	}
+}
+
 void olcConsoleGameEngineGLOOP::FillCircle(int xc, int yc, int r, wchar_t c, short col)
 {
 	// Taken from wikipedia
@@ -911,7 +1110,7 @@ void olcConsoleGameEngineGLOOP::DrawWireFrameModel(const std::vector<std::pair<f
 
 	// Create translated model vector of coordinate pairs
 	vector<pair<float, float>> vecTransformedCoordinates;
-	int verts = vecModelCoordinates.size();
+	size_t verts = vecModelCoordinates.size();
 	vecTransformedCoordinates.resize(verts);
 
 	// Rotate

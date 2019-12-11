@@ -1,12 +1,14 @@
 #pragma once
 #include <cmath>
 #include <cassert>
+#include <limits>
 
 namespace PPG
 {	
 	namespace Math
 	{
 		const float PI = 3.1415927f;
+		const float EPSILON = 1.e-6f;
 		struct vec2;
 		struct vec3;
 		struct vec4;
@@ -114,7 +116,7 @@ namespace PPG
 			vec4& operator/=(const float scalar);
 			float operator[](const int idx) const;
 			vec4  outer(const vec4& rhs) const;
-			vec3  cartesian();
+			vec3  cartesian() const;
 			void  homogenize();
 			void  normalize();
 

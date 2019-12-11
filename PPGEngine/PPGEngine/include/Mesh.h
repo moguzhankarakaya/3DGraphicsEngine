@@ -1,7 +1,9 @@
 #pragma once
+#include <regex>
 #include <vector>
 #include <string>
 #include <fstream>
+#include <iostream>
 #include <strstream>
 
 #include "GeoPrimatives.h"

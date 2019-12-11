@@ -497,14 +497,13 @@ void PPG::Math::vec4::homogenize()
 {
 	if (w != 0.0f)
 	{
-		x /= w; y /= w; z /= w;
+		x /= w; y /= w; z /= w; w /= w;
 	}
 }
 
-PPG::Math::vec3 PPG::Math::vec4::cartesian()
+PPG::Math::vec3 PPG::Math::vec4::cartesian() const
 {
 	vec3 result;
-	homogenize();
 	result.x = x;
 	result.y = y;
 	result.z = z;

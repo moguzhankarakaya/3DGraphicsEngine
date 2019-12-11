@@ -4,13 +4,8 @@
 PPG::Projection::Projection(float aspectRatio, float fieldOfViewAngle, float nearPlane, float farPlane) :
 	ar{ aspectRatio }, fov{ tan(Math::Conversions::DegreeToRad(fieldOfViewAngle / 2.0f)) }, n{ nearPlane }, f{ farPlane } 
 {
-	CalculateOrthographicProjection();
+	//CalculateOrthographicProjection();
 	CalculatePerspectiveProjection();
-}
-
-void PPG::Projection::CalculateOrthographicProjection()
-{
-
 }
 
 void PPG::Projection::CalculatePerspectiveProjection()
