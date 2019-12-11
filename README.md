@@ -17,13 +17,18 @@ The whole project is created and tested using VS 2017.
                                 
                                     Richard Feynman
 
+Utah Teapot rendered using flat shading under different illumination
+
 ![Utah Teapot](PPGEngine/PPGEngine/screnshots/Teapot.png?raw=true "Utah Teapot rendered using flat shading under different illumination")
 
+Cybertruck rendered from different angles using flat shading
 
-![Cybertruck](PPGEngine/PPGEngine/screnshots/Cybertruck.png?raw=true "Cybertruck rendered from different angles using flat shading.")
+![Cybertruck](PPGEngine/PPGEngine/screnshots/Cybertruck.png?raw=true "Cybertruck rendered from different angles using flat shading")
 
+Simple cube with wall texture applied on it
 
-![Texture](PPGEngine/PPGEngine/screnshots/Texture.png?raw=true "Simple cube with wall texture applied on it.")
+![Texture](PPGEngine/PPGEngine/screnshots/Texture.png?raw=true "Simple cube with wall texture applied on it")
 
+A racetrack texture rendered on a flat surface
 
-![Racetrack](PPGEngine/PPGEngine/screnshots/Racetrack.png?raw=true "A racetrack texture rendered on a flat surface.")
+![Racetrack](PPGEngine/PPGEngine/screnshots/Racetrack.png?raw=true "A racetrack texture rendered on a flat surface")
